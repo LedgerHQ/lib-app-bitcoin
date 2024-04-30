@@ -29,7 +29,7 @@ static nbgl_layoutTagValueList_t pairList;
 bool transaction_prompt_done;
 
 static void (*start_transaction_callback)(bool);
-static char text[40];
+static char text[50];
 
 // User action callbacks
 static void approved_user_action_callback(void) { user_action(1); }
@@ -135,7 +135,9 @@ void ui_confirm_single_flow(void) {
 
 static void finish_transaction_flow(bool choice) {
   if (choice) {
-    nbgl_useCaseReviewStreamingFinish("Sign transaction\nto send Bitcoin?",
+    snprintf(text, sizeof(text), "Sign transaction\nto send %s?",
+             COIN_COINID_NAME);
+    nbgl_useCaseReviewStreamingFinish(text,
                                       sign_transaction_processing_callback);
   } else {
     sign_transaction_processing_callback(false);
