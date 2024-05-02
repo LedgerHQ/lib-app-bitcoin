@@ -20,6 +20,7 @@
 
 #include "apdu_constants.h"
 #include "context.h"
+#include "filesystem.h"
 
 /*
  * Function: handler_get_coin_version
