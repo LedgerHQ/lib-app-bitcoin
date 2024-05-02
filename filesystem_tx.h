@@ -30,14 +30,13 @@
 #define MAX_BIP44_ADDRESS_INDEX_RECOMMENDED 50000
 
 struct transaction_summary_s {
-  unsigned char active;
-  unsigned char payToAddressVersion;
-  unsigned char payToScriptHashVersion;
   unsigned char authorizationHash[32];
   unsigned char keyPath[MAX_BIP32_PATH_LENGTH];
   unsigned char
       transactionNonce[8]; // used to bind to the current set of inputs
   unsigned short messageLength;
   unsigned char sighashType;
+  int payToAddressVersion;
+  int payToScriptHashVersion;
 };
 typedef struct transaction_summary_s transaction_summary_t;
