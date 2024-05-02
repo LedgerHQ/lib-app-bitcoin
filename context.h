@@ -245,7 +245,8 @@ typedef enum coin_kind_e {
   COIN_KIND_LBRY,
   COIN_KIND_RESISTANCE,
   COIN_KIND_RAVENCOIN,
-  COIN_KIND_HYDRA
+  COIN_KIND_HYDRA,
+  COIN_KIND_UNUSED
 } coin_kind_t;
 
 void context_init(void);

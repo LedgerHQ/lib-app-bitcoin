@@ -105,7 +105,7 @@ COIN_NATIVE_SEGWIT_PREFIX=0
 endif
 
 ifndef COIN_KIND
-$(error COIN_KIND must be defined)
+COIN_KIND=COIN_KIND_UNUSED
 endif
 
 ifndef COIN_FLAGS
