@@ -43,8 +43,7 @@ ICON_NANOS = icons/nanos_app_$(COIN).gif
 ICON_NANOX = icons/nanox_app_$(COIN).gif
 ICON_NANOSP = icons/nanox_app_$(COIN).gif
 ICON_STAX = icons/stax_app_$(COIN).gif
-# Temporary reuse of stax icons while waiting for flex icons
-ICON_FLEX = icons/stax_app_$(COIN).gif
+ICON_FLEX = icons/flex_app_$(COIN).png
 
 ifeq ($(TARGET_NAME),$(filter $(TARGET_NAME),TARGET_STAX TARGET_FLEX))
 DEFINES += COIN_ICON=C_$(COIN)_64px
