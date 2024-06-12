@@ -30,6 +30,7 @@
 #define INS_SIGN_MESSAGE 0x4E
 #define INS_GET_FIRMWARE_VERSION 0xC4
 #define INS_GET_COIN_VER 0x16
+#define INS_GET_OPERATION_MODE 0x24
 
 #define SW_INCORRECT_LENGTH 0x6700
 #define SW_SECURITY_STATUS_NOT_SATISFIED 0x6982
@@ -61,3 +62,4 @@ unsigned short handler_get_trusted_input(buffer_t *buffer, uint8_t p1,
                                          uint8_t p2);
 unsigned short handler_get_firmware_version(void);
 unsigned short handler_get_coin_version(void);
+unsigned short handler_get_operation_mode(void);

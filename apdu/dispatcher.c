@@ -110,6 +110,11 @@ int apdu_dispatcher(const command_t *cmd) {
 
     return handler_get_coin_version();
 
+  case INS_GET_OPERATION_MODE:
+    PRINTF("Get operation mode\n");
+
+    return handler_get_operation_mode();
+
   default:
     PRINTF("Instruction not supported\n");
     return io_send_sw(SW_INS_NOT_SUPPORTED);
