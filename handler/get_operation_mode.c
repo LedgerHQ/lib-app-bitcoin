@@ -19,6 +19,8 @@
 #include "apdu_constants.h"
 #include "context.h"
 
+#define MODE_WALLET 0x01
+
 /*
  * Function: handler_get_firmware_versi
  * ---------------------------------------
@@ -29,8 +31,8 @@
  */
 WEAK unsigned short handler_get_operation_mode() {
 
-  G_io_apdu_buffer[0] = 0x01;
+  G_io_apdu_buffer[0] = MODE_WALLET;
   context.outLength = 0x01;
 
-  return io_send_response_pointer(G_io_apdu_buffer, 0x08, SW_OK);
+  return io_send_response_pointer(G_io_apdu_buffer, context.outLength, SW_OK);
 }
