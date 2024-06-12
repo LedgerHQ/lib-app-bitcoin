@@ -19,7 +19,6 @@
 #include "apdu_constants.h"
 #include "context.h"
 
-
 /*
  * Function: handler_get_firmware_versi
  * ---------------------------------------
