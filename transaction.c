@@ -503,8 +503,7 @@ void transaction_parse(unsigned char parseMode) {
           PRINTF("Untrusted input authorized\n");
           context.transactionBufferPointer++;
           context.transactionDataRemaining--;
-          check_transaction_available(
-              36); // prevout : 32 hash + 4 index
+          check_transaction_available(36); // prevout : 32 hash + 4 index
           transaction_offset_increase(36);
           PRINTF("Marking relaxed input\n");
           context.transactionContext.relaxed = 1;
