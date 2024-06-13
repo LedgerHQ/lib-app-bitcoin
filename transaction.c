@@ -500,8 +500,13 @@ void transaction_parse(unsigned char parseMode) {
         // Handle non-segwit inputs (i.e. InputHashStart 1st APDU's P2==00 &&
         // data[0]==0x00)
         else if (!trustedInputFlag) {
-          PRINTF("Untrusted input not authorized\n");
-          goto fail;
+          PRINTF("Untrusted input authorized\n");
+          context.transactionBufferPointer++;
+          context.transactionDataRemaining--;
+          check_transaction_available(36); // prevout : 32 hash + 4 index
+          transaction_offset_increase(36);
+          PRINTF("Marking relaxed input\n");
+          context.transactionContext.relaxed = 1;
         }
         // Handle non-segwit TrustedInput (i.e. InputHashStart 1st APDU's P2==00
         // & data[0]==0x01)
@@ -554,7 +559,6 @@ void transaction_parse(unsigned char parseMode) {
         // should be null
         if (context.transactionContext.scriptRemaining != 0) {
           PRINTF("Request to sign relaxed input\n");
-          goto fail;
         }
       }
       // Move on

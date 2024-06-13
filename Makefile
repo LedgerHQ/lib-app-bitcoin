@@ -138,4 +138,7 @@ CFLAGS += -DCOIN_COINID_NAME=\"$(COIN_COINID_NAME)\"
 CFLAGS += -DAPPDEVELOPPER=\"$(APPDEVELOPPER)\"
 CFLAGS += -DAPPCOPYRIGHT=\"$(APPCOPYRIGHT)\"
 
+# Enabling DEBUG flag will enable PRINTF and disable optimizations
+#DEBUG=1	
+
 include $(BOLOS_SDK)/Makefile.standard_app
