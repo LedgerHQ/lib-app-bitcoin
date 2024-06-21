@@ -115,6 +115,15 @@ int apdu_dispatcher(const command_t *cmd) {
 
     return handler_get_operation_mode();
 
+  case INS_SET_OPERATION_MODE:
+    PRINTF("Set operation mode\n");
+
+    buf.ptr = cmd->data;
+    buf.size = cmd->lc;
+    buf.offset = 0;
+
+    return handler_set_operation_mode(&buf, cmd->p1, cmd->p2);
+
   default:
     PRINTF("Instruction not supported\n");
     return io_send_sw(SW_INS_NOT_SUPPORTED);
