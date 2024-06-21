@@ -97,7 +97,7 @@ WEAK unsigned short handler_get_wallet_public_key(buffer_t *buffer, uint8_t p1,
     return io_send_sw(SW_INCORRECT_P1_P2);
   }
 
-  if (p2 == P2_CASHADDR && COIN_KIND != COIN_KIND_BITCOIN_CASH) {
+  if (p2 == P2_CASHADDR && COIN_KIND != COIN_KIND_BITCOIN_CASH && COIN_KIND != COIN_KIND_ECASH) {
     PRINTF("Wrong P2 value\n");
     return io_send_sw(SW_INCORRECT_P1_P2);
   }
