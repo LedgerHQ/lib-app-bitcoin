@@ -64,5 +64,5 @@ unsigned short handler_get_trusted_input(buffer_t *buffer, uint8_t p1,
 unsigned short handler_get_firmware_version(void);
 unsigned short handler_get_coin_version(void);
 unsigned short handler_get_operation_mode(void);
-unsigned short handler_set_operation_mode(buffer_t *buffer,
-                                          uint8_t p1, uint8_t p2);
+unsigned short handler_set_operation_mode(buffer_t *buffer, uint8_t p1,
+                                          uint8_t p2);
