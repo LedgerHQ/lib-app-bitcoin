@@ -42,7 +42,7 @@ APP_SOURCE_PATH += lib-app-bitcoin/
 ICON_NANOS = icons/nanos_app_$(COIN).gif
 ICON_NANOX = icons/nanox_app_$(COIN).gif
 ICON_NANOSP = icons/nanox_app_$(COIN).gif
-ICON_STAX = icons/stax_app_$(COIN).gif
+ICON_STAX = icons/stax_app_$(COIN).png
 ICON_FLEX = icons/flex_app_$(COIN).png
 
 ifeq ($(TARGET_NAME),$(filter $(TARGET_NAME),TARGET_STAX TARGET_FLEX))
