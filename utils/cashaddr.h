@@ -29,7 +29,7 @@
 #define CASHADDR_P2PKH 0
 #define CASHADDR_P2SH 1
 
-/** Encode a Bitcoin Cash address
+/** Encode a Bitcoin Cash or eCash address
  *
  *  In:      hash:         Pointer to the hash
  *           hash_length:  Length of hash (bytes). Only 20 bytes (160 bits)

@@ -1,3 +1,4 @@
+#include "context.h"
 #include "filesystem_tx.h"
 #include "ledger_assert.h"
 #include "read.h"
@@ -42,6 +43,13 @@ static uint64_t div100000000(uint64_t n) {
   return res;
 }
 
+static uint64_t div100(uint64_t n) {
+  uint64_t res = n;
+  res = div10(res);
+  res = div10(res);
+  return res;
+}
+
 static size_t n_digits(uint64_t number) {
   size_t count = 0;
   do {
@@ -63,11 +71,21 @@ void format_sats_amount(const char *coin_name, uint64_t amount,
 
   char *amount_str = out + coin_name_len + 1;
 
+  uint64_t integral_part;
+  uint32_t fractional_part;
+
   // HACK: avoid __udivmoddi4
-  // uint64_t integral_part = amount / 100000000;
-  // uint32_t fractional_part = (uint32_t) (amount % 100000000);
-  uint64_t integral_part = div100000000(amount);
-  uint32_t fractional_part = (uint32_t)(amount - integral_part * 100000000);
+  if (COIN_KIND == COIN_KIND_ECASH) {
+    // integral_part = amount / 100;
+    // fractional_part = (uint32_t) (amount % 100);
+    integral_part = div100(amount);
+    fractional_part = (uint32_t)(amount - integral_part * 100);
+  } else {
+    // integral_part = amount / 100000000;
+    // fractional_part = (uint32_t) (amount % 100000000);
+    integral_part = div100000000(amount);
+    fractional_part = (uint32_t)(amount - integral_part * 100000000);
+  }
 
   // format the integral part, starting from the least significant digit
   size_t integral_part_digit_count = n_digits(integral_part);
@@ -85,15 +103,23 @@ void format_sats_amount(const char *coin_name, uint64_t amount,
   if (fractional_part == 0) {
     amount_str[integral_part_digit_count] = '\0';
   } else {
-    // format the fractional part (exactly 8 digits, possibly with trailing
-    // zeros)
     amount_str[integral_part_digit_count] = '.';
     char *fract_part_str = amount_str + integral_part_digit_count + 1;
-    snprintf(fract_part_str, 8 + 1, "%08u", fractional_part);
+    if (COIN_KIND == COIN_KIND_ECASH) {
+      // format the fractional part (exactly 2 digits, possibly with trailing
+      // zeros). For eCash we don't need to drop the trailing zeros, there is a
+      // single one at most.
+      snprintf(fract_part_str, 2 + 1, "%02u", fractional_part);
 
-    // drop trailing zeros
-    for (int i = 7; i > 0 && fract_part_str[i] == '0'; i--) {
-      fract_part_str[i] = '\0';
+    } else {
+      // format the fractional part (exactly 8 digits, possibly with trailing
+      // zeros)
+      snprintf(fract_part_str, 8 + 1, "%08u", fractional_part);
+
+      // drop trailing zeros
+      for (int i = 7; i > 0 && fract_part_str[i] == '0'; i--) {
+        fract_part_str[i] = '\0';
+      }
     }
   }
 }
