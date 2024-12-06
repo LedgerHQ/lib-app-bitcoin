@@ -18,7 +18,6 @@ typedef struct swap_data_s {
   unsigned char amount[8];
   unsigned char fees[8];
   char destination_address[65];
-  unsigned char should_exit;
 } swap_data_t;
 
 union display_variables {
