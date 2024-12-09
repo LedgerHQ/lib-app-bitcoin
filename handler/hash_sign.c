@@ -150,7 +150,8 @@ WEAK unsigned short handler_hash_sign(buffer_t *buffer, uint8_t p1,
     request_sign_path_approval(context.transactionSummary.keyPath);
   } else {
     // Sign immediately
-    user_action_signtx(1, 0);
+    // Only flag "direct" if we are in swap mode
+    user_action_signtx(1, G_called_from_swap);
   }
   if (G_called_from_swap) {
     // if we signed all outputs we should exit,
@@ -159,9 +160,22 @@ WEAK unsigned short handler_hash_sign(buffer_t *buffer, uint8_t p1,
     vars.swap_data.alreadySignedInputs++;
     if (vars.swap_data.alreadySignedInputs >=
         vars.swap_data.totalNumberOfInputs) {
-      vars.swap_data.should_exit = 1;
+      if (G_swap_response_ready) {
+        // Safety against trying to make the app sign multiple TX
+        // This code should never be triggered as the app is supposed to exit
+        // after after returning the signature for the last input
+        PRINTF("Safety against double signing triggered\n");
+        os_sched_exit(-1);
+      } else {
+        // We will quit the app after this transaction, whether it succeeds or
+        // fails
+        PRINTF(
+            "Swap response is ready, the app will quit after the next send\n");
+        G_swap_response_ready = true;
+      }
     }
-    return io_send_response_pointer(G_io_apdu_buffer, context.outLength, SW_OK);
+    io_send_response_pointer(G_io_apdu_buffer, context.outLength, SW_OK);
+    return 0;
   }
   return 0;
 }
