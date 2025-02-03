@@ -141,6 +141,8 @@ static uint8_t prepare_message_signature(void) {
 extern int handle_output_state(unsigned int *processed);
 extern void hash_input_finalize_full_reset(void);
 
+#define ED_OFFSET (1 + 8 + 5)
+
 // Analog of confirm_single_output to work
 // in silent mode, when called from SWAP app
 unsigned int silent_confirm_single_output() {
@@ -154,13 +156,25 @@ unsigned int silent_confirm_single_output() {
     }
     vars.swap_data.was_address_checked = 1;
     // check amount
-    swap_bytes(amount, context.currentOutput, 8);
+    swap_bytes(amount, &context.currentOutput[ED_OFFSET], 8);
     if (memcmp(amount, vars.swap_data.amount, 8) != 0) {
       PRINTF("Amount not matched\n");
+      PRINTF("amount = ");
+      for (int i = 0; i < 8; i++) {
+        PRINTF("%02X", amount[i]);
+      }
+      PRINTF("\n");
+
+      PRINTF("vars.swap_data.amount = %s\n", vars.swap_data.amount);
+      for (int i = 0; i < 8; i++) {
+        PRINTF("%02X", vars.swap_data.amount[i]);
+      }
+      PRINTF("\n");
+
       return 0;
     }
-    get_address_from_output_script(context.currentOutput + 8,
-                                   sizeof(context.currentOutput) - 8, tmp,
+    get_address_from_output_script(&context.currentOutput[ED_OFFSET + 8],
+                                   sizeof(context.currentOutput) - (ED_OFFSET + 8), tmp,
                                    sizeof(tmp));
     if (strcmp(tmp, vars.swap_data.destination_address) != 0) {
       PRINTF("Address not matched\n");

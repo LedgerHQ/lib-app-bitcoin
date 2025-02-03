@@ -17,22 +17,45 @@ static uint8_t *G_swap_sign_return_value_address;
 bool swap_copy_transaction_parameters(create_transaction_parameters_t *params) {
   PRINTF("Inside swap_copy_transaction_parameters\n");
 
-  // Ensure no extraid
-  if (params->destination_address_extra_id == NULL) {
-    PRINTF("destination_address_extra_id expected\n");
-    return false;
-  } else if (params->destination_address_extra_id[0] != '\0') {
-    PRINTF("destination_address_extra_id expected empty, not '%s'\n",
-           params->destination_address_extra_id);
-    return false;
-  }
-
+  swap_data_t swap_validated;
   // We need this "trick" as the input data position can overlap with app
   // globals and also because we want to memset the whole bss segment as it is
   // not done when an app is called as a lib. This is necessary as many part of
   // the code expect bss variables to initialized at 0.
-  swap_data_t swap_validated;
   memset(&swap_validated, 0, sizeof(swap_validated));
+
+  // Ensure no extraid
+  if (params->destination_address_extra_id != NULL) {
+    switch (params->destination_address_extra_id[0]) {
+      case 0: {
+        swap_validated.mode = SWAP_MODE_STANDARD;
+        explicit_bzero(swap_validated.payin_extra_data, sizeof(swap_validated.payin_extra_data));
+        break;
+      }
+      case 2: {
+        swap_validated.mode = SWAP_MODE_CROSSCHAIN;
+        memcpy(swap_validated.payin_extra_data,
+              params->destination_address_extra_id,
+              sizeof(swap_validated.payin_extra_data));
+
+      PRINTF("swap_validated.payin_extra_data = ");
+      for (size_t i = 0; i < sizeof(swap_validated.payin_extra_data); i++) {
+        PRINTF("%02X", swap_validated.payin_extra_data[i]);
+      }
+      PRINTF("\n");
+
+        PRINTF("SWAP_MODE_CROSSCHAIN mode\n");
+        break;
+      }
+      default: {
+        swap_validated.mode = SWAP_MODE_ERROR;
+        break;
+      }
+    }
+  }
+  else {
+    swap_validated.mode = SWAP_MODE_ERROR;
+  }
 
   // Save recipient
   strlcpy(swap_validated.destination_address, params->destination_address,
@@ -66,7 +89,6 @@ bool swap_copy_transaction_parameters(create_transaction_parameters_t *params) {
 
   // Copy from stack back to global data segment
   memcpy(&vars.swap_data, &swap_validated, sizeof(swap_validated));
-  swap_validated.initialized = true;
   return true;
 }
 

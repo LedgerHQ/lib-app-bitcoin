@@ -78,6 +78,8 @@ WEAK unsigned short handler_hash_input_start(buffer_t *buffer, uint8_t p1,
           (p2 == P2_NEW_SEGWIT) || (p2 == P2_NEW_SEGWIT_CASHADDR) ||
           (p2 == P2_NEW_SEGWIT_OVERWINTER) || (p2 == P2_NEW_SEGWIT_SAPLING);
       // Master transaction reset
+
+      PRINTF("handler_hash_input_start context.transactionContext.firstSigned = %u\n", context.transactionContext.firstSigned);
       context.transactionContext.firstSigned = 1;
       context.transactionContext.consumeP2SH = 0;
       context.transactionContext.relaxed = 0;

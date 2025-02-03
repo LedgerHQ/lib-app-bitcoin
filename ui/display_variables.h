@@ -7,6 +7,12 @@
 #define MAX_DERIV_PATH_ASCII_LENGTH 1 + 10 * (10 + 2) + 1
 #define MAX_CHAR_PER_LINE 25
 
+typedef enum {
+    SWAP_MODE_STANDARD = 0,
+    SWAP_MODE_CROSSCHAIN = 1,
+    SWAP_MODE_ERROR = 0xFF,
+} swap_mode_t;
+
 typedef struct swap_data_s {
   int was_address_checked;
   // total number of inputs to be signed
@@ -18,6 +24,8 @@ typedef struct swap_data_s {
   unsigned char amount[8];
   unsigned char fees[8];
   char destination_address[65];
+  swap_mode_t mode;
+  uint8_t payin_extra_data[1 + 32];
 } swap_data_t;
 
 union display_variables {

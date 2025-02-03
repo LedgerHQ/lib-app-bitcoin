@@ -467,6 +467,8 @@ hash_input_finalize_full_internal(transaction_summary_t *transactionSummary,
   // transaction, otherwise abort
   // (this is done to keep the transaction counter limit per session
   // synchronized)
+
+  PRINTF("Before context.transactionContext.firstSigned = %u\n", context.transactionContext.firstSigned);
   if (context.transactionContext.firstSigned) {
     memmove(transactionSummary->authorizationHash, authorizationHash,
             sizeof(transactionSummary->authorizationHash));
@@ -486,6 +488,7 @@ hash_input_finalize_full_internal(transaction_summary_t *transactionSummary,
       PRINTF("Segwit parsed once\n");
       context.transactionContext.transactionState = TRANSACTION_NONE;
     } else {
+      PRINTF("TRANSACTION_SIGN_READY\n");
       context.transactionContext.transactionState = TRANSACTION_SIGN_READY;
     }
     hash_input_finalize_full_reset();
