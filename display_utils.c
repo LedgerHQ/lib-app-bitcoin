@@ -1,3 +1,4 @@
+#include "context.h"
 #include "filesystem_tx.h"
 #include "ledger_assert.h"
 #include "read.h"
@@ -35,13 +36,6 @@ static uint64_t div10(uint64_t n) {
   }
 }
 
-static uint64_t div100000000(uint64_t n) {
-  uint64_t res = n;
-  for (int i = 0; i < 8; i++)
-    res = div10(res);
-  return res;
-}
-
 static size_t n_digits(uint64_t number) {
   size_t count = 0;
   do {
@@ -63,13 +57,34 @@ void format_sats_amount(const char *coin_name, uint64_t amount,
 
   char *amount_str = out + coin_name_len + 1;
 
-  // HACK: avoid __udivmoddi4
-  // uint64_t integral_part = amount / 100000000;
-  // uint32_t fractional_part = (uint32_t) (amount % 100000000);
-  uint64_t integral_part = div100000000(amount);
-  uint32_t fractional_part = (uint32_t)(amount - integral_part * 100000000);
+  // Determine decimal places based on whether peercoin units are enabled
+  uint64_t decimal_divisor;
+  uint8_t decimal_places;
 
-  // format the integral part, starting from the least significant digit
+  if (COIN_FLAGS & FLAG_PEERCOIN_UNITS) {
+    // Peercoin has 6 decimal places (1,000,000 units)
+    decimal_divisor = 1000000;
+    decimal_places = 6;
+  } else {
+    // Bitcoin has 8 decimal places (100,000,000 units)
+    decimal_divisor = 100000000;
+    decimal_places = 8;
+  }
+
+  // Calculate integral and fractional parts using optimized division
+  uint64_t integral_part;
+  uint32_t fractional_part;
+
+  // Apply div10 multiple times based on decimal places
+  integral_part = amount;
+  for (int i = 0; i < decimal_places; i++) {
+    integral_part = div10(integral_part);
+  }
+
+  // Calculate fractional part based on decimal_divisor
+  fractional_part = (uint32_t)(amount - integral_part * decimal_divisor);
+
+  // Format the integral part, starting from the least significant digit
   size_t integral_part_digit_count = n_digits(integral_part);
   for (unsigned int i = 0; i < integral_part_digit_count; i++) {
     // HACK: avoid __udivmoddi4
@@ -85,14 +100,17 @@ void format_sats_amount(const char *coin_name, uint64_t amount,
   if (fractional_part == 0) {
     amount_str[integral_part_digit_count] = '\0';
   } else {
-    // format the fractional part (exactly 8 digits, possibly with trailing
-    // zeros)
+    // Format the fractional part with the appropriate number of digits
     amount_str[integral_part_digit_count] = '.';
     char *fract_part_str = amount_str + integral_part_digit_count + 1;
-    snprintf(fract_part_str, 8 + 1, "%08u", fractional_part);
 
-    // drop trailing zeros
-    for (int i = 7; i > 0 && fract_part_str[i] == '0'; i--) {
+    // Format with appropriate number of leading zeros based on decimal_places
+    char format[8];
+    snprintf(format, sizeof(format), "%%0%uu", decimal_places);
+    snprintf(fract_part_str, decimal_places + 1, format, fractional_part);
+
+    // Drop trailing zeros
+    for (int i = decimal_places - 1; i > 0 && fract_part_str[i] == '0'; i--) {
       fract_part_str[i] = '\0';
     }
   }
