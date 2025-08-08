@@ -27,7 +27,9 @@ void display_token(void);
 unsigned int finalize_tx(void);
 
 // UI response to btchip to finish the exchange
-unsigned char user_action(unsigned char confirming);
+// returns true if no data has been sent or an error occurred, false in case of
+// success
+bool user_action(unsigned char confirming);
 
 // request the UI to redisplay the idle screen
 void idle(void);

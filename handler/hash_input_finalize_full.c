@@ -537,7 +537,7 @@ unsigned short handler_hash_input_finalize_full(buffer_t *buffer, uint8_t p1,
   return io_send_response_pointer(G_io_apdu_buffer, context.outLength, sw);
 }
 
-unsigned char user_action(unsigned char confirming) {
+bool user_action(unsigned char confirming) {
   unsigned short sw = SW_OK;
 
   // confirm and finish the apdu exchange //spaghetti
@@ -570,7 +570,7 @@ unsigned char user_action(unsigned char confirming) {
           break;
         } else {
           // Let the UI play
-          return 1;
+          return true;
         }
       } else {
         // Out of data to process, wait for the next call
@@ -587,7 +587,7 @@ unsigned char user_action(unsigned char confirming) {
         sw = SW_INCORRECT_DATA;
       } else {
         // Let the UI play
-        return 1;
+        return true;
       }
     }
 
@@ -615,5 +615,7 @@ unsigned char user_action(unsigned char confirming) {
     // we've finished the processing of the input
     hash_input_finalize_full_reset();
   }
-  return io_send_response_pointer(G_io_apdu_buffer, context.outLength, sw);
+
+  int ret = io_send_response_pointer(G_io_apdu_buffer, context.outLength, sw);
+  return (ret < 0);
 }
