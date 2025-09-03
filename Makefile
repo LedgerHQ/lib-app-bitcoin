@@ -44,10 +44,14 @@ ICON_NANOX = icons/nanox_app_$(COIN).gif
 ICON_NANOSP = icons/nanox_app_$(COIN).gif
 ICON_STAX = icons/stax_app_$(COIN).png
 ICON_FLEX = icons/flex_app_$(COIN).png
+ICON_APEX_P = icons/apex_p_app_$(COIN).png
 
 ifeq ($(TARGET_NAME),$(filter $(TARGET_NAME),TARGET_STAX TARGET_FLEX))
 DEFINES += COIN_ICON=C_$(COIN)_64px
 DEFINES += COIN_ICON_BITMAP=C_$(COIN)_64px_bitmap
+else ifeq ($(TARGET_NAME),$(filter $(TARGET_NAME),TARGET_APEX_P))
+DEFINES += COIN_ICON=C_$(COIN)_48px
+DEFINES += COIN_ICON_BITMAP=C_$(COIN)_48px_bitmap
 endif
 
 # Application allowed derivation curves.

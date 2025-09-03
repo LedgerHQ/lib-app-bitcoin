@@ -181,7 +181,7 @@ static void request_approval_callback(bool confirmed) {
 
 static void continue_change_path_approval_flow(bool confirmed) {
   if (confirmed) {
-    nbgl_useCaseChoice(&C_Important_Circle_64px, "Unusual\nchange path",
+    nbgl_useCaseChoice(&IMPORTANT_CIRCLE_ICON, "Unusual\nchange path",
                        vars.tmp_warning.derivation_path, "Continue",
                        "Reject if not sure", request_approval_callback);
   } else {
@@ -200,7 +200,7 @@ void ui_request_change_path_approval_flow(void) {
 
 static void continue_segwit_input_approval_flow(bool confirmed) {
   if (confirmed) {
-    nbgl_useCaseChoice(&C_Important_Circle_64px, "Unverified inputs",
+    nbgl_useCaseChoice(&IMPORTANT_CIRCLE_ICON, "Unverified inputs",
                        "Update Ledger Live\nor third party software",
                        "Continue", "Reject if not sure",
                        request_approval_callback);
@@ -233,7 +233,7 @@ static void user_action_signtx_callback(bool confirmed) {
 }
 
 void ui_request_sign_path_approval_flow(void) {
-  nbgl_useCaseChoice(&C_Important_Circle_64px, "Unusual\nsign path",
+  nbgl_useCaseChoice(&IMPORTANT_CIRCLE_ICON, "Unusual\nsign path",
                      vars.tmp_warning.derivation_path, "Continue",
                      "Reject if not sure", user_action_signtx_callback);
 }
@@ -307,7 +307,7 @@ static void public_post_warning_flow(bool confirmed) {
 }
 
 void ui_display_public_with_warning_flow(void) {
-  nbgl_useCaseChoice(&C_Important_Circle_64px, "Unusual\nderivation path", NULL,
+  nbgl_useCaseChoice(&IMPORTANT_CIRCLE_ICON, "Unusual\nderivation path", NULL,
                      "Continue", "Reject if not sure",
                      public_post_warning_flow);
 }
