@@ -270,9 +270,6 @@ uint8_t set_key_path_to_display(const unsigned char *keyPath) {
 }
 
 void display_public_key(uint8_t is_derivation_path_unusual) {
-  // append a white space at the end of the address to avoid glitch on nano S
-  strlcat((char *)G_io_apdu_buffer + 200, " ", sizeof(G_io_apdu_buffer) - 200);
-
   if (is_derivation_path_unusual) {
     ui_display_public_with_warning_flow();
   } else {
