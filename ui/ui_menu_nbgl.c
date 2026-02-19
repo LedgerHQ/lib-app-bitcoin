@@ -37,7 +37,7 @@ static const nbgl_contentInfoList_t infoList = {
 static void exit(void) { os_sched_exit(-1); }
 
 void ui_idle_flow(void) {
-  nbgl_useCaseHomeAndSettings(COIN_COINID_NAME, &COIN_ICON, NULL,
+  nbgl_useCaseHomeAndSettings(COIN_COINID_NAME, &COIN_ICON, COIN_TAGLINE,
                               INIT_HOME_PAGE, NULL, &infoList, NULL, exit);
 }
 #endif // HAVE_NBGL

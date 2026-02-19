@@ -110,8 +110,8 @@ void io_seproxyhal_display(const bagl_element_t *element) {
 //////////////////////////////////////////////////////////////////////////////////////
 UX_STEP_NOCB(ux_idle_flow_1_step, nn,
              {
-                 "Application",
-                 "is ready",
+                 COIN_TAGLINE1,
+                 COIN_TAGLINE2,
              });
 UX_STEP_NOCB(ux_idle_flow_2_step, bn,
              {

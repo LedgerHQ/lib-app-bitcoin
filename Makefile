@@ -137,10 +137,25 @@ DEFINES +=COIN_FORKID=$(COIN_FORKID)
 
 # Following defines exposed to the app as a CFLAG because it might contain spaces
 CFLAGS += -DCOIN_COINID_NAME=\"$(COIN_COINID_NAME)\"
+ifeq ($(TARGET_NAME),$(filter $(TARGET_NAME),TARGET_STAX TARGET_FLEX TARGET_APEX_P))
+    ifndef COIN_TAGLINE1
+        CFLAGS += -DCOIN_TAGLINE=NULL
+    else
+        CFLAGS += -DCOIN_TAGLINE=\"$(COIN_TAGLINE1)\\n$(COIN_TAGLINE2)\"
+    endif
+else
+    ifndef COIN_TAGLINE1
+        CFLAGS += -DCOIN_TAGLINE1=\""Application"\"
+        CFLAGS += -DCOIN_TAGLINE2=\""is ready"\"
+    else
+        CFLAGS += -DCOIN_TAGLINE1=\"$(COIN_TAGLINE1)\"
+        CFLAGS += -DCOIN_TAGLINE2=\"$(COIN_TAGLINE2)\"
+    endif
+endif
 CFLAGS += -DAPPDEVELOPPER=\"$(APPDEVELOPPER)\"
 CFLAGS += -DAPPCOPYRIGHT=\"$(APPCOPYRIGHT)\"
 
 # Enabling DEBUG flag will enable PRINTF and disable optimizations
-#DEBUG=1	
+#DEBUG=1
 
 include $(BOLOS_SDK)/Makefile.standard_app
