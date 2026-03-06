@@ -1,10 +1,10 @@
 # app-bitcoin library
 
-This library is intended to be used as a submodule in bitcoin clones applications. 
+This library is intended to be used as a submodule in bitcoin clones applications.
 
 All APDUs handlers are defined as `WEAK` and can be overriden in the application source file if needed.
 
-For more information on usage, refer to [app-bitcoin-clone-boilerplate](https://app-bitcoin-clone-boilerplate)
+For more information on usage, refer to [app-bitcoin](https://github.com/LedgerHQ/app-bitcoin).
 
 # Are you developing a Ledger device application?
 - See the developers’ documentation on the [Developer Portal](https://developers.ledger.com/)
