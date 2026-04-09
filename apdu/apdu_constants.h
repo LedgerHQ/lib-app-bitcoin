@@ -32,6 +32,7 @@
 #define INS_GET_COIN_VER 0x16
 #define INS_GET_OPERATION_MODE 0x24
 #define INS_SET_OPERATION_MODE 0x26
+#define INS_GET_MASTER_FINGERPRINT 0xd0
 
 #define SW_INCORRECT_LENGTH 0x6700
 #define SW_SECURITY_STATUS_NOT_SATISFIED 0x6982
@@ -57,6 +58,7 @@ unsigned short handler_hash_input_start(buffer_t *buffer, uint8_t p1,
                                         uint8_t p2);
 unsigned short handler_hash_input_finalize_full(buffer_t *buffer, uint8_t p1,
                                                 uint8_t p2);
+unsigned short handler_get_master_fingerprint(void);
 unsigned short handler_get_wallet_public_key(buffer_t *buffer, uint8_t p1,
                                              uint8_t p2);
 unsigned short handler_get_trusted_input(buffer_t *buffer, uint8_t p1,
