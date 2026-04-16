@@ -124,6 +124,10 @@ int apdu_dispatcher(const command_t *cmd) {
 
     return handler_set_operation_mode(&buf, cmd->p1, cmd->p2);
 
+  case INS_GET_MASTER_FINGERPRINT:
+    PRINTF("Get master fingerprint\n");
+    return handler_get_master_fingerprint();
+
   default:
     PRINTF("Instruction not supported\n");
     return io_send_sw(SW_INS_NOT_SUPPORTED);
